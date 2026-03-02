@@ -1,0 +1,21 @@
+package com.example.metrics;
+
+import java.lang.reflect.Constructor;
+
+public class ReflectionAttack {
+
+    public static void main(String[] args) throws Exception {
+        MetricsRegistry instance1 = MetricsRegistry.getInstance();
+        System.out.println("Singleton instance hash = " + instance1.hashCode());
+
+        try {
+            Constructor<MetricsRegistry> ctor =
+                    MetricsRegistry.class.getDeclaredConstructor();
+            ctor.setAccessible(true);
+            MetricsRegistry instance2 = ctor.newInstance();
+            System.out.println("Reflection instance hash = " + instance2.hashCode());
+        } catch (Exception e) {
+            System.out.println("Reflection attack failed: " + e);
+        }
+    }
+}
