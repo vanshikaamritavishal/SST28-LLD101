@@ -1,0 +1,6 @@
+Finance Report Q1
+-----------------
+Total revenue: 1,200,000
+Total expenses: 850,000
+Net profit: 350,000
+Only STAFF and ADMIN should see this.

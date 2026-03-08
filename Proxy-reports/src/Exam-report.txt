@@ -1,0 +1,6 @@
+Exam Results Summary
+--------------------
+Course: CS101
+Average score: 78
+Pass rate: 86%
+Only STAFF and ADMIN should see detailed results.
