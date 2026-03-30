@@ -1,0 +1,75 @@
+@startuml
+
+class User {
+  -id: String
+  -name: String
+  -email: String
+}
+class Admin
+class Customer
+User <|-- Admin
+User <|-- Customer
+
+class Movie {
+  -id: String
+  -title: String
+  -language: String
+  -durationInMinutes: int
+  -genre: String
+  -basePrice: double
+}
+
+class Theatre {
+  -id: String
+  -name: String
+  -city: String
+  -address: String
+}
+
+class Screen {
+  -id: String
+  -name: String
+}
+
+class Seat {
+  -id: String
+  -seatNumber: String
+  -seatType: SeatType
+}
+
+class Show {
+  -id: String
+  -startTime: LocalDateTime
+}
+
+class Booking {
+  -id: String
+  -status: BookingStatus
+}
+
+class Ticket {
+  -id: String
+  -totalAmount: double
+}
+
+class Payment {
+  -id: String
+  -amount: double
+  -method: PaymentMethod
+  -status: PaymentStatus
+}
+
+Theatre "1" -- "*" Screen
+Screen "1" -- "*" Seat
+Movie "1" -- "*" Show
+Theatre "1" -- "*" Show
+Screen "1" -- "*" Show
+Customer "1" -- "*" Booking
+Booking "1" -- "1" Show
+Booking "1" -- "1" Payment
+Booking "1" -- "1" Ticket
+Booking "*" -- "*" Seat
+Ticket "*" -- "1" Show
+Ticket "*" -- "1" Customer
+
+@enduml
