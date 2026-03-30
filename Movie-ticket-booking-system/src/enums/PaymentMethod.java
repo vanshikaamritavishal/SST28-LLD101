@@ -1,3 +1,5 @@
+package enums;
+
 public enum PaymentMethod {
     UPI,
     CREDIT_CARD,

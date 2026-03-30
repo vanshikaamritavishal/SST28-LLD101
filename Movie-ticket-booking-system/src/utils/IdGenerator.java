@@ -1,5 +1,9 @@
-package Movie-ticket-booking-system.src.utils;
+package utils;
+
+import java.util.UUID;
 
 public class IdGenerator {
-    
+    public static String generateId() {
+        return UUID.randomUUID().toString().substring(0, 8);
+    }
 }
