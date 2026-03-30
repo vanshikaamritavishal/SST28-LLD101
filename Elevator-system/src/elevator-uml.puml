@@ -1,0 +1,75 @@
+@startuml
+
+class Building {
+  -floors: List<Floor>
+  -elevators: List<Elevator>
+}
+
+class Floor {
+  -floorNumber: int
+  -upButton: Button
+  -downButton: Button
+}
+
+class Elevator {
+  -id: String
+  -direction: Direction
+  -state: ElevatorState
+  -car: ElevatorCar
+}
+
+class ElevatorCar {
+  -currentFloor: int
+  -maxWeight: int
+  -currentWeight: int
+  -door: Door
+}
+
+class Door {
+  -open: boolean
+}
+
+class Panel {
+  -buttons: List<Button>
+}
+
+class Button {
+  -label: String
+  -pressed: boolean
+}
+
+class Request {
+  -sourceFloor: int
+  -destinationFloor: int
+  -direction: Direction
+  -requestType: RequestType
+}
+
+class Dispatcher {
+  +assignElevator()
+}
+
+class ElevatorController {
+  +processRequest()
+}
+
+class ElevatorService {
+  -building: Building
+  -dispatcher: Dispatcher
+  -controller: ElevatorController
+}
+
+Building "1" -- "*" Floor
+Building "1" -- "*" Elevator
+Elevator "1" -- "1" ElevatorCar
+ElevatorCar "1" -- "1" Door
+ElevatorCar "1" -- "1" Panel
+Panel "1" -- "*" Button
+Floor "1" -- "*" Button
+ElevatorService "1" -- "1" Dispatcher
+ElevatorService "1" -- "1" ElevatorController
+ElevatorService "1" -- "*" Request
+Dispatcher --> Elevator
+ElevatorController --> Elevator
+
+@enduml
