@@ -1,0 +1,85 @@
+@startuml DistributedCacheClassDiagram
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam linetype ortho
+
+title Distributed Cache - Class Diagram
+
+interface Database<K, V> {
+  +get(key: K): V
+  +put(key: K, value: V): void
+}
+
+class InMemoryDatabase<K, V> {
+  -storage: Map<K, V>
+  +get(key: K): V
+  +put(key: K, value: V): void
+}
+
+interface DistributionStrategy<K> {
+  +getNodeIndex(key: K, numberOfNodes: int): int
+}
+
+class ModuloDistributionStrategy<K> {
+  +getNodeIndex(key: K, numberOfNodes: int): int
+}
+
+interface EvictionPolicy<K> {
+  +keyAccessed(key: K): void
+  +keyInserted(key: K): void
+  +keyRemoved(key: K): void
+  +evictKey(): K
+}
+
+class LRUEvictionPolicy<K> {
+  -order: LinkedHashSet<K>
+  +keyAccessed(key: K): void
+  +keyInserted(key: K): void
+  +keyRemoved(key: K): void
+  +evictKey(): K
+}
+
+interface EvictionPolicyFactory<K> {
+  +createEvictionPolicy(): EvictionPolicy<K>
+}
+
+class LRUEvictionPolicyFactory<K> {
+  +createEvictionPolicy(): EvictionPolicy<K>
+}
+
+class CacheNode<K, V> {
+  -nodeId: String
+  -capacity: int
+  -storage: Map<K, V>
+  -evictionPolicy: EvictionPolicy<K>
+  +getNodeId(): String
+  +get(key: K): V
+  +put(key: K, value: V): void
+  +containsKey(key: K): boolean
+  +remove(key: K): void
+  +size(): int
+}
+
+class DistributedCache<K, V> {
+  -nodes: List<CacheNode<K, V>>
+  -distributionStrategy: DistributionStrategy<K>
+  -database: Database<K, V>
+  +DistributedCache(numberOfNodes: int, capacityPerNode: int, distributionStrategy: DistributionStrategy<K>, database: Database<K, V>, evictionPolicyFactory: EvictionPolicyFactory<K>)
+  +get(key: K): V
+  +put(key: K, value: V): void
+  -getNodeForKey(key: K): CacheNode<K, V>
+}
+
+Database <|.. InMemoryDatabase
+DistributionStrategy <|.. ModuloDistributionStrategy
+EvictionPolicy <|.. LRUEvictionPolicy
+EvictionPolicyFactory <|.. LRUEvictionPolicyFactory
+
+DistributedCache --> Database
+DistributedCache --> DistributionStrategy
+DistributedCache --> CacheNode
+DistributedCache --> EvictionPolicyFactory
+CacheNode --> EvictionPolicy
+
+@enduml
